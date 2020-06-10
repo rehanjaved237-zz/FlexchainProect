@@ -175,10 +175,39 @@
             </div>
         </div>
 
-        <div class="widget-program-box mg-tb-30">
+
+        <div class="product-status mg-b-30">
             <div class="container-fluid">
                 <div class="row">
-
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="product-status-wrap">
+                            <h4>Marks Status in {{.CourseCode}}</h4>
+                            <table>
+                                <tr>
+                                    <th>Evaluation Name</th>
+                                    <th>Total Marks</th>
+                                    <th>Obtained Marks</th>
+                                    <th>Dated</th>
+                                </tr>
+                                {{range $idx, $value := .Attend}}
+                                      <tr>
+                                        <td>
+                                          {{($value).EvalName}}
+                                        </td>
+                                        <td>
+                                          {{($value).TotalMarks}}
+                                        </td>
+                                        <td>
+                                          {{($value).ObtainedMarks}}
+                                        </td>
+                                        <td>
+                                          {{($value).Dated}}
+                                        </td>
+                                      </tr>
+                                  {{end}}
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

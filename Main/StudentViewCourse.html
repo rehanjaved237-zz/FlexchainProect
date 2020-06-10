@@ -93,9 +93,9 @@
                         <li>
                             <a class="has-arrow" href="mailbox.html" aria-expanded="false"><span class="mini-click-non">Marks</span></a>
                             <ul class="submenu-angle" aria-expanded="false">
-                                <li><a title="File Manager" href="/studentviewmarks"><span class="mini-sub-pro">View Marks</span></a></li>
-                                <li><a title="File Manager" href="/studentviewattendance"><span class="mini-sub-pro">View Attendance</span></a></li>
-                                <li><a title="File Manager" href="/studentviewgrades"><span class="mini-sub-pro">View Grades</span></a></li>
+                                <li><a title="File Manager" href="/studentviewmarks/{{.CourseCode}}"><span class="mini-sub-pro">View Marks</span></a></li>
+                                <li><a title="File Manager" href="/studentviewattendance/{{.CourseCode}}"><span class="mini-sub-pro">View Attendance</span></a></li>
+                                <li><a title="File Manager" href="/studentviewgrades/{{.CourseCode}}"><span class="mini-sub-pro">View Grades</span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -186,7 +186,7 @@
                                   <div class="m icon-box">
                                       <i class="fa fa-star-o" aria-hidden="true"></i>
                                   </div>
-                                  <a href="/studentviewattendance/" class="btn btn-success btn-sm">View Attendance</a>
+                                  <a href="/studentviewattendance/{{.CourseCode}}" class="btn btn-success btn-sm">View Attendance</a>
                               </div>
                           </div>
                       </div>
@@ -199,7 +199,7 @@
                                   <div class="m icon-box">
                                       <i class="fa fa-star-o" aria-hidden="true"></i>
                                   </div>
-                                  <a href="/studentviewmarks/" class="btn btn-success btn-sm">View Marks</a>
+                                  <a href="/studentviewmarks/{{.CourseCode}}" class="btn btn-success btn-sm">View Marks</a>
                               </div>
                           </div>
                       </div>
@@ -212,7 +212,7 @@
                                   <div class="m icon-box">
                                       <i class="fa fa-star-o" aria-hidden="true"></i>
                                   </div>
-                                  <a href="/studentviewgrade/" class="btn btn-success btn-sm">View Grades</a>
+                                  <a href="/studentviewgrade/{{.CourseCode}}" class="btn btn-success btn-sm">View Grades</a>
                               </div>
                           </div>
                       </div>

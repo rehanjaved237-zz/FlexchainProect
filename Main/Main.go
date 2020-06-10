@@ -645,8 +645,10 @@ func StudentViewCourse0Handler(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		Port  string
+		CourseCode string
 	}{
 		w1.FrontEnd,
+		courseCode,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewCourse.html", data)
 	if err != nil {
@@ -654,14 +656,40 @@ func StudentViewCourse0Handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type AttendUpload struct {
+	AttendanceDate string
+	AttendanceStatus string
+}
+
 func StudentViewAttendanceHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentViewAttendance Run Successfully")
+	courseCode := r.URL.Path[len("/studentviewattendance/"):]
+
+	chain := c1.Chain1.FilterBlockchain("UploadAttendance")
+
+	var attend []AttendUpload
+
+	for _, sol := range chain {
+		val := sol.Content.(at1.Attendance)
+    if (val.CourseCode == courseCode) {
+			for i, s := range val.StudentsRollNo {
+				if (s == b1.UserName) {
+					attend = append(attend, AttendUpload{val.AttendanceDate, val.StudentsAttendanceStatus[i]})
+				}
+			}
+		}
+	}
+
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		CourseCode string
+		Attend []AttendUpload
 	}{
 		w1.FrontEnd,
-		c1.Chain1.FilterBlockchain("RegCourse"),
+		c1.Chain1.FilterBlockchain("UploadAttendance"),
+		courseCode,
+		attend,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewAttendance.html", data)
 	if err != nil {
@@ -671,12 +699,15 @@ func StudentViewAttendanceHandler(w http.ResponseWriter, r *http.Request) {
 
 func StudentViewMarksHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentViewMarks Run Successfully")
+	courseCode := r.URL.Path[len("/studentviewmarks/"):]
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		CourseCode string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("RegCourse"),
+		courseCode,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewMarks.html", data)
 	if err != nil {
@@ -686,11 +717,14 @@ func StudentViewMarksHandler(w http.ResponseWriter, r *http.Request) {
 
 func StudentViewGradeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentViewGrade Run Successfully")
+	courseCode := r.URL.Path[len("/studentviewgrade/"):]
 	data := struct {
 		Port  string
+		CourseCode string
 		Chain []b1.Block
 	}{
 		w1.FrontEnd,
+		courseCode,
 		c1.Chain1.FilterBlockchain("RegCourse"),
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewGrade.html", data)
