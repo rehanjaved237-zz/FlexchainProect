@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.button3 {
+  background-color: white;
+  color: black;
+  border: 2px solid #f44336;
+}
+
+.button3:hover {
+  background-color: #f44336;
+  color: white;
+}
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid red;
+}
+input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid red;
+}
+
+</style>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>FlexChain</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Merriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+  <link href="/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/coming-soon.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="overlay"></div>
+  <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+    <source src="/assets/mp4/bg.mp4" type="video/mp4">
+  </video>
+
+  <div class="masthead">
+    <div class="masthead-bg"></div>
+    <div class="container h-100">
+      <div class="row h-100">
+        <div class="col-12 my-auto">
+          <div class="masthead-content text-white py-5 py-md-0">
+            <h1 class="mb-3">FLEXCHAIN</h1>
+            <p class="mb-5">FlexChain is a
+              <strong>custom built permissioned blockchain</strong> which is used for the management of student marks and grades</p>
+
+              <form action="Student.html"  method="post">
+              <label for="fname">Login As</label>
+              <br>
+              <input list="browsers" name="browser" placeholder="SELECT" >
+              <datalist id="browsers">
+              <option value="Student">
+              <option value="Teacher">
+              <option value="HOD">
+              </datalist>
+  			  <br>
+          <br>
+
+  			  <label for="fname">Username</label>
+  			  <input type="text" id="fname" name="fname" >
+  			  <label for="lname">Password</label>
+          <input type="password" id="lname" name="lname">
+  			  <br>
+  			  <br>
+  			  <button type="submit" class="button button3">Login</button>
+			  </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Custom scripts for this template -->
+  <script src="/assets/js/coming-soon.min.js"></script>
+
+</body>
+
+</html>

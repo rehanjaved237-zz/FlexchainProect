@@ -1,0 +1,41 @@
+{
+ "Head": {
+  "Status": true,
+  "No": 0,
+  "Name": "Course",
+  "Miner": "",
+  "Content": {
+   "CourseCode": "CS-202",
+   "CourseName": "CS-202",
+   "CourseDescription": "Name",
+   "CreditHours": "sdsfds",
+   "Semester": "2",
+   "AssignedTeacher": "sdfds"
+  },
+  "Time": "2020-03-06 10:39:57.00246 +0500 PKT m=+36.053499001",
+  "Hash": "f85b429c8866b9f09d87987d199a01dd67c6b3d98779535221c051311973efaf",
+  "PrevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "Prev": null,
+  "Next": null
+ },
+ "Tail": {
+  "Status": true,
+  "No": 0,
+  "Name": "Course",
+  "Miner": "",
+  "Content": {
+   "CourseCode": "CS-202",
+   "CourseName": "CS-202",
+   "CourseDescription": "Name",
+   "CreditHours": "sdsfds",
+   "Semester": "2",
+   "AssignedTeacher": "sdfds"
+  },
+  "Time": "2020-03-06 10:39:57.00246 +0500 PKT m=+36.053499001",
+  "Hash": "f85b429c8866b9f09d87987d199a01dd67c6b3d98779535221c051311973efaf",
+  "PrevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "Prev": null,
+  "Next": null
+ },
+ "NoOfBlocks": 1
+}
