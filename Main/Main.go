@@ -88,9 +88,11 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		OwnAddr   string
 		LoginAddr string
+		UserName string
 	}{
 		w1.FrontEnd + "/Home/",
 		w1.FrontEnd + "/Login/",
+		b1.UserName,
 	}
 
 	err := templates.ExecuteTemplate(w, "Home.html", &data)
@@ -111,10 +113,12 @@ func HODHandler(w http.ResponseWriter, r *http.Request) {
 		Port      string
 		OwnAddr   string
 		LoginAddr string
+		UserName string
 	}{
 		w1.FrontEnd,
 		w1.FrontEnd + "/Home/",
 		w1.FrontEnd + "/Login/",
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "HOD.html", data)
 	if err != nil {
@@ -123,14 +127,36 @@ func HODHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func TeacherHandler(w http.ResponseWriter, r *http.Request) {
-	err := templates.ExecuteTemplate(w, "Teacher.html", nil)
+	data := struct {
+		Port      string
+		OwnAddr   string
+		LoginAddr string
+		UserName string
+	}{
+		w1.FrontEnd,
+		w1.FrontEnd + "/Home/",
+		w1.FrontEnd + "/Login/",
+		b1.UserName,
+	}
+	err := templates.ExecuteTemplate(w, "Teacher.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
 func StudentHandler(w http.ResponseWriter, r *http.Request) {
-	err := templates.ExecuteTemplate(w, "Student.html", nil)
+	data := struct {
+		Port      string
+		OwnAddr   string
+		LoginAddr string
+		UserName string
+	}{
+		w1.FrontEnd,
+		w1.FrontEnd + "/Home/",
+		w1.FrontEnd + "/Login/",
+		b1.UserName,
+	}
+	err := templates.ExecuteTemplate(w, "Student.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -139,8 +165,10 @@ func StudentHandler(w http.ResponseWriter, r *http.Request) {
 func HodAddStudentHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port string
+		UserName string
 	}{
 		w1.FrontEnd,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "HODAddStudent.html", data)
 	if err != nil {
@@ -151,8 +179,10 @@ func HodAddStudentHandler(w http.ResponseWriter, r *http.Request) {
 func HodAddInstructorHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port string
+		UserName string
 	}{
 		w1.FrontEnd,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "HODAddInstructor.html", data)
 	if err != nil {
@@ -163,8 +193,10 @@ func HodAddInstructorHandler(w http.ResponseWriter, r *http.Request) {
 func TeacherSelectOptionHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port string
+		UserName string
 	}{
 		w1.FrontEnd,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherSelectOption.html", data)
 	if err != nil {
@@ -175,13 +207,40 @@ func TeacherSelectOptionHandler(w http.ResponseWriter, r *http.Request) {
 func HodOfferCourseHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port string
+		UserName string
 	}{
 		w1.FrontEnd,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "HODOfferCourse.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func HodAddInstructor1Handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		fmt.Fprintf(w, "Error aa gaya bhai.. yaar ye get function call kar raha hai.. html mein yakeenan koi masla hai")
+		fmt.Fprintf(w, "Get function called")
+	} else {
+		r.ParseForm()
+		name := r.FormValue("name")
+		phone := r.FormValue("phone")
+		email := r.FormValue("email")
+		specialization := r.FormValue("specialization")
+
+		newStudent := std1.Student{
+			Name:       name,
+			Phone:      phone,
+			Department: specialization,
+			Email:      email,
+		}
+
+		blk := b1.GenerateBlock("Teacher", newStudent)
+		blk.Status = true
+		n1.BroadCastBlock(blk)
+	}
+	http.Redirect(w, r, "/hod/", http.StatusSeeOther)
 }
 
 func HodAddStudent1Handler(w http.ResponseWriter, r *http.Request) {
@@ -268,8 +327,10 @@ func StudentRegCourseHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentRegCourseHandler Successfully")
 	data := struct {
 		Port string
+		UserName string
 	}{
 		w1.FrontEnd,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentRegCourse.html", data)
 	if err != nil {
@@ -322,9 +383,11 @@ func HodMineHistoryHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port    string
 		BBuffer buff1.BlockBuffer
+		UserName string
 	}{
 		w1.FrontEnd,
 		buff1.BlkBuffer,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "HODMineHistory.html", data)
 	if err != nil {
@@ -337,9 +400,11 @@ func TeacherCoursesHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherCourses.html", data)
 	if err != nil {
@@ -351,6 +416,8 @@ func AddToBlockchainHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("AddToBlockchainHandler Run")
 	hash := r.URL.Path[len("/addtoblockchain/"):]
 
+	fmt.Println("Hashed Value", hash)
+
 	status, index := buff1.BlkBuffer.FindBlock(hash)
 	if status == true {
 
@@ -361,7 +428,20 @@ func AddToBlockchainHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Block Not Found")
 	}
-	http.Redirect(w, r, "/hod/", http.StatusSeeOther)
+
+	data := struct {
+		Port  string
+		Chain []b1.Block
+		UserName string
+	}{
+		w1.FrontEnd,
+		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
+	}
+	err := templates.ExecuteTemplate(w, "HOD.html", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func RegisterStudentCourseHandler(w http.ResponseWriter, r *http.Request) {
@@ -376,7 +456,20 @@ func RegisterStudentCourseHandler(w http.ResponseWriter, r *http.Request) {
 		n1.BroadCastBlock(blk)
 	}
 
-	http.Redirect(w, r, "/studentofferedcourses/", http.StatusSeeOther)
+	data := struct {
+		Port  string
+		Chain []b1.Block
+		UserName string
+	}{
+		w1.FrontEnd,
+		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
+	}
+	err := templates.ExecuteTemplate(w, "StudentOfferedCourses.html", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
 }
 
 func filterCourseByCode(courseCode string, allBlks []b1.Block) cour1.Course {
@@ -401,7 +494,20 @@ func RemoveFromBlockBufferHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Block Not Found")
 	}
-	http.Redirect(w, r, "/hod/", http.StatusSeeOther)
+
+	data := struct {
+		Port  string
+		Chain []b1.Block
+		UserName string
+	}{
+		w1.FrontEnd,
+		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
+	}
+	err := templates.ExecuteTemplate(w, "HOD", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
 
 func TeacherSelectOption0Handler(w http.ResponseWriter, r *http.Request) {
@@ -411,9 +517,11 @@ func TeacherSelectOption0Handler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		CourseCode string
+		UserName string
 	}{
 		w1.FrontEnd,
 		courseCode,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherSelectOption.html", data)
 	if err != nil {
@@ -426,9 +534,11 @@ func BlocklistHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.SliceBlockchain(),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "BlockList.html", data)
 	if err != nil {
@@ -441,9 +551,11 @@ func StudentEnrollCourseHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentEnrollCourse.html", data)
 	if err != nil {
@@ -458,10 +570,12 @@ func TeacherUploadGradesHandler(w http.ResponseWriter, r *http.Request) {
 		Port  string
 		Chain []b1.Block
 		CourseCode string
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Student"),
 		courseCode,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherUploadGrades.html", data)
 	if err != nil {
@@ -476,10 +590,12 @@ func TeacherUploadMarksHandler(w http.ResponseWriter, r *http.Request) {
 		Port  string
 		Chain []b1.Block
 		CourseCode string
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Student"),
 		courseCode,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherUploadMarks.html", data)
 	if err != nil {
@@ -487,17 +603,46 @@ func TeacherUploadMarksHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func contains(s []string, e string) bool {
+    for _, a := range s {
+        if a == e {
+            return true
+        }
+    }
+    return false
+}
+
 func TeacherUploadAttendanceHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("TeacherUploadAttendanceHandler Executed")
 	courseCode := r.URL.Path[len("/teacheruploadattendance/"):]
+
+	// chain1 := c1.Chain1.FilterBlockchain("RegCourse")
+	// var owners []string
+	// for _, val := range chain1 {
+	// 	temp1 := val.Content.(cour1.Course)
+	//  	if (courseCode == temp1.CourseCode) {
+	//  		owners = append(owners, val.Owner)
+	//  	}
+	// }
+	 chain2 := c1.Chain1.FilterBlockchain("Student")
+	// var chain3 []b1.Block
+	// for _, val := range chain2 {
+	// 	temp2 := val.Content.(std1.Student)
+	// 	if (contains(owners, temp2.RollNo) == true) {
+	// 		chain3 = append(chain3, val)
+	// 	}
+	// }
+
 	data := struct {
 		Port  string
 		Chain []b1.Block
 		CourseCode string
+		UserName string
 	}{
 		w1.FrontEnd,
-		c1.Chain1.FilterBlockchain("Student"),
+		chain2,
 		courseCode,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "TeacherUploadAttendance.html", data)
 	if err != nil {
@@ -510,9 +655,11 @@ func StudentEnrolledCoursesHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentEnrolledCourses.html", data)
 	if err != nil {
@@ -530,9 +677,66 @@ func loginRequestHandler(w http.ResponseWriter, r *http.Request) {
 		role := r.FormValue("role")
 		username := r.FormValue("username")
 		password := r.FormValue("password")
-		fmt.Println("username:", username)
-		fmt.Println("password:", password)
-		fmt.Println("role:", role)
+
+		var privateKeys []string
+		privateKeys = append(privateKeys, "88ba4fd15402e3730715288c1efb4b0f4877c860fefc73074df104b620532c69")
+		privateKeys = append(privateKeys, "7049841e760f87a8938cf9162a85455c82bd5949867f66c56d04695131b51db8")
+		privateKeys = append(privateKeys, "28764925f935273afaf91b3a77cac7e7ff0c00069a2c58334eef7cbca4d830e7")
+		privateKeys = append(privateKeys, "eff2bbd2682078bddd1ddbe14ae2cb2f157dbb5d75cfa2ac2f063ae213697e73")
+
+		if (contains(privateKeys, password) == true) {
+			b1.UserName = username
+			b1.PrivateKey = password
+			if (role == "Student" || role == "student") {
+				data := struct {
+					Port      string
+					OwnAddr   string
+					LoginAddr string
+					UserName string
+				}{
+					w1.FrontEnd,
+					w1.FrontEnd + "/Home/",
+					w1.FrontEnd + "/Login/",
+					b1.UserName,
+				}
+				err := templates.ExecuteTemplate(w, "Student.html", data)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+			} else if (role == "Teacher" || role == "teacher") {
+				data := struct {
+					Port      string
+					OwnAddr   string
+					LoginAddr string
+					UserName string
+				}{
+					w1.FrontEnd,
+					w1.FrontEnd + "/Home/",
+					w1.FrontEnd + "/Login/",
+					b1.UserName,
+				}
+				err := templates.ExecuteTemplate(w, "Teacher.html", data)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+			} else if (role == "HOD" || role == "hod") {
+				data := struct {
+					Port      string
+					OwnAddr   string
+					LoginAddr string
+					UserName string
+				}{
+					w1.FrontEnd,
+					w1.FrontEnd + "/Home/",
+					w1.FrontEnd + "/Login/",
+					b1.UserName,
+				}
+				err := templates.ExecuteTemplate(w, "HOD.html", data)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+				}
+			}
+		}
 	}
 }
 
@@ -568,7 +772,19 @@ func TeacherUploadAttendance1Handler(w http.ResponseWriter, r *http.Request) {
 		blk.Status = true
 		n1.BroadCastBlock(blk)
 
-		http.Redirect(w, r, "/teacher/", http.StatusSeeOther)
+		data := struct {
+			Port  string
+			Chain []b1.Block
+			UserName string
+		}{
+			w1.FrontEnd,
+			c1.Chain1.FilterBlockchain("Course"),
+			b1.UserName,
+		}
+		err := templates.ExecuteTemplate(w, "Teacher.html", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 
 	}
 }
@@ -603,7 +819,19 @@ func TeacherUploadGrades1Handler(w http.ResponseWriter, r *http.Request) {
 		blk.Status = false
 		n1.BroadCastBlock(blk)
 
-		http.Redirect(w, r, "/teacher/", http.StatusSeeOther)
+		data := struct {
+			Port  string
+			Chain []b1.Block
+			UserName string
+		}{
+			w1.FrontEnd,
+			c1.Chain1.FilterBlockchain("Course"),
+			b1.UserName,
+		}
+		err := templates.ExecuteTemplate(w, "Teacher.html", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 
 	}
 }
@@ -613,9 +841,11 @@ func StudentOfferedCoursesHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("Course"),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentOfferedCourses.html", data)
 	if err != nil {
@@ -628,9 +858,11 @@ func StudentRegisteredCoursesHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		Chain []b1.Block
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("RegCourse"),
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentRegisteredCourses.html", data)
 	if err != nil {
@@ -646,9 +878,11 @@ func StudentViewCourse0Handler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		Port  string
 		CourseCode string
+		UserName string
 	}{
 		w1.FrontEnd,
 		courseCode,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewCourse.html", data)
 	if err != nil {
@@ -680,16 +914,21 @@ func StudentViewAttendanceHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	fmt.Println("Attend")
+	fmt.Println(attend)
+
 	data := struct {
 		Port  string
 		Chain []b1.Block
 		CourseCode string
 		Attend []AttendUpload
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("UploadAttendance"),
 		courseCode,
 		attend,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewAttendance.html", data)
 	if err != nil {
@@ -697,17 +936,44 @@ func StudentViewAttendanceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type MarksUpload struct {
+	EvalName string
+	TotalMarks string
+	ObtainedMarks string
+	Dated string
+}
+
 func StudentViewMarksHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentViewMarks Run Successfully")
 	courseCode := r.URL.Path[len("/studentviewmarks/"):]
+
+	chain := c1.Chain1.FilterBlockchain("UploadMarks")
+
+	var attend []MarksUpload
+
+	for _, sol := range chain {
+		val := sol.Content.(m1.Marks)
+    if (val.CourseCode == courseCode) {
+			for i, s := range val.StudentsRollNo {
+				if (s == b1.UserName) {
+					attend = append(attend, MarksUpload{val.Title, val.TotalMarks, val.StudentsMarks[i], val.UploadDate})
+				}
+			}
+		}
+	}
+
 	data := struct {
 		Port  string
 		Chain []b1.Block
 		CourseCode string
+		Marks []MarksUpload
+		UserName string
 	}{
 		w1.FrontEnd,
 		c1.Chain1.FilterBlockchain("RegCourse"),
 		courseCode,
+		attend,
+		b1.UserName,
 	}
 	err := templates.ExecuteTemplate(w, "StudentViewMarks.html", data)
 	if err != nil {
@@ -718,15 +984,35 @@ func StudentViewMarksHandler(w http.ResponseWriter, r *http.Request) {
 func StudentViewGradeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("StudentViewGrade Run Successfully")
 	courseCode := r.URL.Path[len("/studentviewgrade/"):]
+
+	var grade string
+	chain := c1.Chain1.FilterBlockchain("UploadGrade")
+
+	for _, sol := range chain {
+		val := sol.Content.(g1.Grades)
+		if (val.CourseCode == courseCode) {
+			for i, s := range val.StudentsRollNo {
+				if (s == b1.UserName) {
+					grade = val.StudentsGrades[i]
+				}
+			}
+		}
+	}
+
 	data := struct {
 		Port  string
 		CourseCode string
 		Chain []b1.Block
+		Grade string
+		UserName string
 	}{
 		w1.FrontEnd,
 		courseCode,
 		c1.Chain1.FilterBlockchain("RegCourse"),
+		grade,
+		b1.UserName,
 	}
+
 	err := templates.ExecuteTemplate(w, "StudentViewGrade.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -770,7 +1056,19 @@ func TeacherUploadMarks1Handler(w http.ResponseWriter, r *http.Request) {
 		blk.Status = true
 		n1.BroadCastBlock(blk)
 
-		http.Redirect(w, r, "/teacher/", http.StatusSeeOther)
+		data := struct {
+			Port  string
+			Chain []b1.Block
+			UserName string
+		}{
+			w1.FrontEnd,
+			c1.Chain1.FilterBlockchain("Course"),
+			b1.UserName,
+		}
+		err := templates.ExecuteTemplate(w, "Teacher.html", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 
 	}
 }
@@ -814,6 +1112,7 @@ func runHandlers() {
 	http.HandleFunc("/teacheruploadattendance1/", TeacherUploadAttendance1Handler)
 	http.HandleFunc("/teacheruploadmarks1/", TeacherUploadMarks1Handler)
 	http.HandleFunc("/teacheruploadgrades1/", TeacherUploadGrades1Handler)
+	http.HandleFunc("/hodaddinstructor1/", HodAddInstructor1Handler)
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 

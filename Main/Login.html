@@ -82,10 +82,10 @@ input[type=password] {
             <p class="mb-5">FlexChain is a
               <strong>custom built permissioned blockchain</strong> which is used for the management of student marks and grades</p>
 
-              <form action="Student.html"  method="post">
+              <form action="/loginRequest/"  method="post">
               <label for="fname">Login As</label>
               <br>
-              <input list="browsers" name="browser" placeholder="SELECT" >
+              <input list="browsers" name="role" placeholder="SELECT" >
               <datalist id="browsers">
               <option value="Student">
               <option value="Teacher">
@@ -95,9 +95,9 @@ input[type=password] {
           <br>
 
   			  <label for="fname">Username</label>
-  			  <input type="text" id="fname" name="fname" >
+  			  <input type="text" id="fname" name="username" >
   			  <label for="lname">Password</label>
-          <input type="password" id="lname" name="lname">
+          <input type="password" id="lname" name="password">
   			  <br>
   			  <br>
   			  <button type="submit" class="button button3">Login</button>

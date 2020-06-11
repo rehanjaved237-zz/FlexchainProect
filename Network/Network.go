@@ -82,7 +82,7 @@ func HandleBlock(conn net.Conn, data []byte) {
 
 	for i, blk := range blkList.BlockList {
 		if blk.Status == false {
-			hash := buff1.GenerateHash(blk)
+			hash := buff1.GenerateHash1(blk)
 			found, _ := buff1.BlkBuffer.FindBlock(hash)
 			fmt.Println(found, i)
 			if !found {

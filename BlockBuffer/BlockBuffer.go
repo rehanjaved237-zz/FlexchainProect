@@ -20,7 +20,7 @@ type BlockBuffer struct {
 }
 
 func (a *BlockBuffer) InsertBlock(b b1.Block) {
-  a.Hash = append(a.Hash, GenerateHash(b))
+  a.Hash = append(a.Hash, GenerateHash1(b))
   a.Body = append(a.Body, b)
   a.Size += 1
 }
@@ -60,6 +60,23 @@ func (a *BlockBuffer) RemoveBlock(index int) (string, b1.Block) {
   }
 }
 
+func GenerateHash1(blk b1.Block) string {
+  blk.No = 0
+  blk.Miner = ""
+  blk.Time = ""
+  blk.Hash = ""
+  blk.Prev = nil
+  blk.Next = nil
+  blk.Owner = ""
+
+  val, err := json.Marshal(blk)
+  if err != nil {
+    fmt.Println("Error:", err)
+  }
+  hash := sha256.Sum256(val)
+  return hex.EncodeToString(hash[:])
+}
+
 func GenerateHash(blk b1.Block) string {
   blk.No = 0
   blk.Miner = ""
@@ -67,6 +84,7 @@ func GenerateHash(blk b1.Block) string {
   blk.Hash = ""
   blk.Prev = nil
   blk.Next = nil
+  blk.Owner = ""
 
   val, err := json.Marshal(blk)
   if err != nil {

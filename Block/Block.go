@@ -35,6 +35,7 @@ func GenerateBlock(name string, cont interface{}) Block {
 func (b Block) GenerateBlockHash() string {
   blk := b
   blk.No, blk.Time, blk.Hash, blk.PrevHash, blk.Prev, blk.Next = 0, "", "", "", nil, nil
+  blk.Owner = ""
   val, err := json.Marshal(blk)
   if err != nil {
     fmt.Println("Error:", err)
